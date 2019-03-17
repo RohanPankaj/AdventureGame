@@ -6,8 +6,13 @@ screenLength = 1000
 window = pygame.display.set_mode((screenLength, screenWidth))
 pygame.display.set_caption("Adventure Game")
 
-walk = [pygame.image.load("standing.PNG"),pygame.image.load("Walking1.PNG")]
-background = pygame.image.load("background.PNG")
+walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'), pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'), pygame.image.load('R7.png'), pygame.image.load('R8.png'), pygame.image.load('R9.png')]
+walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
+
+standing = pygame.image.load('standing.png')
+
+background = [pygame.image.load("rightRoom.PNG"), pygame.image.load("normalRoom.PNG"),pygame.image.load("leftRoom.PNG")]
+
 clock = pygame.time.Clock()
 x = 50
 y = 50
@@ -17,7 +22,7 @@ vel = 5
 
 left = False
 right = False
-walk = False
+
 walkCount = 0
 
 
@@ -27,19 +32,26 @@ run = True
 def redrawGameWindow():
     global walkCount
 
-    window.blit(background, (0,0))
-    if walkCount + 1 > 27:
+    window.blit(background[1], (0,0))
+   
+    if walkCount + 1 >= 27:
         walkCount = 0
     
-    if walk:
-        window.blit(walk[walkCount//2], (x, y))
+    if right:
+        window.blit(walkRight[walkCount//3], (x, y))
         walkCount += 1
+    
+    elif left:
+        window.blit(walkLeft[walkCount//3], (x,y))
+        walkCount +=1
+    else:
+        window.blit(standing,(x,y))
     '''else:
         window.blit(walk[walkCount], (x, y))
         walkCount += 1'''
     pygame.display.update()
 while run:
-    clock.tick(6)
+    clock.tick(27)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -59,14 +71,14 @@ while run:
         right = False
         left = False
         walkCount = 0
-    if controls[pygame.K_UP] and y > vel:
+    '''if controls[pygame.K_UP] and y > vel:
         y -= vel
         right = False
         left = False
     if controls[pygame.K_DOWN] and y < screenLength - height - vel:
         y += vel
         right = False
-        LEft = False
+        LEft = False'''
     redrawGameWindow()
     
 pygame.quit()

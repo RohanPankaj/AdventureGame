@@ -10,7 +10,7 @@ pygame.display.set_caption("Adventure Game")
 walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'), pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'), pygame.image.load('R7.png'), pygame.image.load('R8.png'), pygame.image.load('R9.png')]
 walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
 standing = pygame.image.load('standing.png')
-background = [pygame.image.load("rightRoom.PNG"), pygame.image.load("normalRoom.PNG"),pygame.image.load("leftRoom.PNG")]
+background = [pygame.image.load("leftRoom.PNG"), pygame.image.load("normalRoom.PNG"),pygame.image.load("rightRoom.PNG")]
 
 
 class player(object):
@@ -36,7 +36,14 @@ class player(object):
             self.walkCount +=1
         else:
             window.blit(standing,(self.x, self.y))
-class background(object):
+'''class stage(object):
+    
+    def __init__(self, x, roomNumber, backgroundNumber):
+        self.x = x
+        self.roomnumber = 1
+        self.backgroundNumber = 1
+    
+    
     def changeBackground(self, x, roomNumebr, backgroundNumber):
         if self.x >= 500:
             self.roomNumber += 1
@@ -45,23 +52,38 @@ class background(object):
         if self.roomNumber == 4:
             self.backgroundNumber = 2
         elif self.roomNumber ==2:
-            self.backgroundNumber = 0
+            self.backgroundNumber = 0'''
 #initialize variables
 clock = pygame.time.Clock()
 gameReset = True
-
+roomNumber = 1
+backgroundNumber = 0
 run = True
 user = player(250, 530, 64, 64)  
-stage = background(user.x, 1, 1)
+#stage = stage(user.x, 1, 1)
 def redrawGameWindow():
+    global gameReset
+    global backgroundNumber
     if gameReset:
         window.blit(background[0], (0,0))
         user.draw(window)
         pygame.display.update()
+        gameReset = False
     elif gameReset == False:
-        window.blit(background[stage.backgroundNumber], (0,0))
+        if roomNumber == 6:
+            backgroundNumber = 2
+        elif roomNumber == 1:
+            backgroundNumber = 0
+        else:
+            backgroundNumber = 1
+        window.blit(background[backgroundNumber], (0,0))
         user.draw(window)
-        pygame.display.update()        
+        pygame.display.update()
+        
+
+    window.blit(background[backgroundNumber], (0,0))
+    user.draw(window)
+    pygame.display.update()        
 
 while run:
     clock.tick(27)
@@ -84,8 +106,13 @@ while run:
         user.right = False
         user.left = False
         user.walkCount = 0
-
+    if user.x >= 500:
+            roomNumber += 1
+            user.x = 100
+    elif user.x <= 100:
+            roomNumber -+ 1
+            user.x = 100
    
     redrawGameWindow()
-    
+   
 pygame.quit()

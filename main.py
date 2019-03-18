@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 screenWidth = 600
@@ -11,8 +12,17 @@ walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.im
 walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
 standing = pygame.image.load('standing.png')
 background = [pygame.image.load("leftRoom.PNG"), pygame.image.load("normalRoom.PNG"),pygame.image.load("rightRoom.PNG")]
+boss = [pygame.image.load("L1E.png")]
+rooms = [0, 1, 2, 3, 4]
 
-
+def ShowBoss(bossRoom):
+    global backgroundNumber
+    if backgroundNumber == bossRoom:
+        window.blit(boss[0], (300,500))
+    #else:
+        
+backpack = []
+objects = ["sword", "magic beans"]
 class player(object):
     def __init__ (self, x, y, width, height):
         self.x = x
@@ -60,6 +70,7 @@ roomNumber = 1
 backgroundNumber = 0
 run = True
 user = player(250, 530, 64, 64)  
+bossRoom = random.choice(rooms)
 #stage = stage(user.x, 1, 1)
 def redrawGameWindow():
     global gameReset
@@ -79,7 +90,6 @@ def redrawGameWindow():
         window.blit(background[backgroundNumber], (0,0))
         user.draw(window)
         pygame.display.update()
-        
 
     window.blit(background[backgroundNumber], (0,0))
     user.draw(window)
@@ -106,13 +116,18 @@ while run:
         user.right = False
         user.left = False
         user.walkCount = 0
-    if user.x >= 500:
+    if user.x >= 500 and backgroundNumber != 2:
             roomNumber += 1
             user.x = 100
-    elif user.x <= 100:
-            roomNumber -+ 1
-            user.x = 100
+    elif user.x <= 100  and backgroundNumber != 0:
+            roomNumber -= 1
+            user.x = 500
    
     redrawGameWindow()
+    ShowBoss(bossRoom)
    
 pygame.quit()
+
+
+
+#Copyright © Rohan Pankaj Adapted form Tech with Ted Tutorial

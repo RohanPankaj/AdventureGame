@@ -1,8 +1,8 @@
 import pygame
 
 pygame.init()
-screenWidth = 1000
-screenLength = 1000
+screenWidth = 600
+screenLength = 600
 window = pygame.display.set_mode((screenLength, screenWidth))
 pygame.display.set_caption("Adventure Game")
 
@@ -36,17 +36,32 @@ class player(object):
             self.walkCount +=1
         else:
             window.blit(standing,(self.x, self.y))
-
+class background(object):
+    def changeBackground(self, x, roomNumebr, backgroundNumber):
+        if self.x >= 500:
+            self.roomNumber += 1
+        elif self.x <= 100:
+            self.roomNumber -+ 1
+        if self.roomNumber == 4:
+            self.backgroundNumber = 2
+        elif self.roomNumber ==2:
+            self.backgroundNumber = 0
 #initialize variables
 clock = pygame.time.Clock()
-
+gameReset = True
 
 run = True
-user = player(300, 410, 64, 64)  
+user = player(250, 530, 64, 64)  
+stage = background(user.x, 1, 1)
 def redrawGameWindow():
-    window.blit(background[0], (0,0))
-    user.draw(window)
-    pygame.display.update()
+    if gameReset:
+        window.blit(background[0], (0,0))
+        user.draw(window)
+        pygame.display.update()
+    elif gameReset == False:
+        window.blit(background[stage.backgroundNumber], (0,0))
+        user.draw(window)
+        pygame.display.update()        
 
 while run:
     clock.tick(27)
@@ -69,7 +84,8 @@ while run:
         user.right = False
         user.left = False
         user.walkCount = 0
-    
+
+   
     redrawGameWindow()
     
 pygame.quit()
